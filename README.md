@@ -1,4 +1,17 @@
 testable-code-workshop
 ======================
 
-A Symfony project created on December 14, 2016, 10:47 am.
+# Setup
+
+Run the following
+```
+# install setup containers
+docker-compose up
+# install dependencies
+php composer.phar install
+# see if web app is working
+open http://localhost/web/reviews/1
+```
+
+# run tests
+```docker exec web ./vendor/bin/simple-phpunit```
