@@ -7,8 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use AppBundle\Controller\ReviewController;
-use Tests\Mock\ReviewMock;
 use AppBundle\Entity\Review;
+use AppBundle\Provider\DateTimeProvider;
+use Tests\Mock\ReviewMock;
 
 class ReviewControllerTest extends WebTestCase
 {
@@ -69,7 +70,8 @@ class ReviewControllerTest extends WebTestCase
     {
         $reviewCtrl = $reviewController = new ReviewController(
             $this->getSaveFunction(),
-            $this->getFindByIdFunction()
+            $this->getFindByIdFunction(),
+            $this->getFakeDateTimeProvider()
         );
         return $reviewCtrl;
     }
@@ -92,5 +94,10 @@ class ReviewControllerTest extends WebTestCase
         return function($id) {
             return $this->findByIdElement;
         };
+    }
+
+    private function getFakeDateTimeProvider()
+    {
+        return new DateTimeProvider();
     }
 }
