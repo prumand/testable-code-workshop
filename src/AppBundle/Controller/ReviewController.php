@@ -66,7 +66,7 @@ class ReviewController extends Controller
         }
 
         $review->setTitle($reviewContent['title']);
-        $review->setRating($reviewContent['rating']);
+        $review->setRating($reviewContent['rating'], (new \DateTime())->format('s'));
 
         $this->persitReview($review);
 

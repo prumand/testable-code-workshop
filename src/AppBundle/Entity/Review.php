@@ -67,11 +67,8 @@ class Review
      *
      * @return Review
      */
-    public function setRating($rating)
+    public function setRating($rating, $seconds)
     {
-        $seconds = (new \DateTime())->format('s');
-
-        
         $this->rating = $rating + $seconds%2;
 
         return $this;
