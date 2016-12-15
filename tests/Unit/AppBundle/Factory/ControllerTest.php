@@ -4,6 +4,7 @@ namespace Tests\Unit\AppBundle\Factory;
 
 use AppBundle\Factory\Controller;
 use AppBundle\Controller\ReviewController;
+use AppBundle\Provider\DateTimeProvider;
 use Doctrine\ORM\EntityManager;
 
 class ControllerTest extends \PHPUnit_Framework_TestCase
@@ -15,7 +16,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factory = new Controller($entityManagerMock);
+        $factory = new Controller($entityManagerMock, new DateTimeProvider());
 
         // Act
         $reviewController = $factory->getReviewController();

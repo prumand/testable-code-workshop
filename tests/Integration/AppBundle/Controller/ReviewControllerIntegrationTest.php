@@ -4,11 +4,14 @@ namespace Tests\Integration\AppBundle;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+use Tests\Mock\FakeDateTimeProvider;
+
 class ReviewControllerIntegrationTest extends WebTestCase
 {
     public function testPutingReviews()
     {
         $client = static::createClient();
+        $client->getContainer()->set('date_time_provider', $this->getFakeDateTimeProvider());
 
         $id = 1;
 
@@ -30,6 +33,11 @@ class ReviewControllerIntegrationTest extends WebTestCase
             $postResponse
         );
         $this->assertArrayHasKey('id', $postResponse);
+    }
+
+    private function getFakeDateTimeProvider()
+    {
+        return new FakeDateTimeProvider(new \DateTime('2016-12-21 14:30:00'));
     }
 
 }
