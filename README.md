@@ -15,3 +15,9 @@ open http://localhost/web/reviews/1
 
 # run tests
 ```docker exec web ./vendor/bin/simple-phpunit```
+
+# create test coverage
+```docker exec web ./vendor/bin/simple-phpunit --coverage-html coverage```
+
+# check coverage
+open coverage/index.html

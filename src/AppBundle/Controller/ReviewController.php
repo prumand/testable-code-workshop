@@ -9,19 +9,30 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+
 use AppBundle\Entity\Review;
 
-class ReviewController extends Controller
+class ReviewController
 {
 
+    private $save;
+    private $findById;
+
+    public function __construct($save, $findById)
+    {
+        if (!is_callable($save) || !is_callable($findById)) {
+            throw new \Exception(__CLASS__ . ' params are not callables');
+        }
+        $this->save = $save;
+        $this->findById = $findById;
+    }
     /**
      * @Route("/reviews/{id}")
      * @Method({"GET"})
      */
     public function getAction($id, Request $request)
     {
-        $review = $this->getReviewEntityManager()
-            ->find($id);
+        $review = ($this->findById)($id);
 
         // service
         if (!$review) {
@@ -41,9 +52,9 @@ class ReviewController extends Controller
 
         $review = new Review();
         $review->setTitle($reviewContent['title']);
-        $review->setTitle($reviewContent['rating']);
+        $review->setRating($reviewContent['rating'], 0);
 
-        $this->persitReview($review);
+        ($this->save)($review);
 
         return new JsonResponse(
             $this->reviewToArray($review)
@@ -58,32 +69,18 @@ class ReviewController extends Controller
     {
         $reviewContent = $this->getJsonBodyAsArray($request);
 
-        $review = $this->getReviewEntityManager()
-            ->find($id);
+        $review = ($this->findById)($id);
 
         if (!$review) {
             return new JsonResponse(['code' => 404, 'message' => 'Review not found'], 404);
         }
 
         $review->setTitle($reviewContent['title']);
-        $review->setRating($reviewContent['rating']);
+        $review->setRating($reviewContent['rating'], (new \DateTime())->format('s'));
 
-        $this->persitReview($review);
+        ($this->save)($review);
 
         return new JsonResponse($this->reviewToArray($review));
-    }
-
-    private function persitReview(Review $review)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($review);
-        $em->flush();
-    }
-
-    private function getReviewEntityManager()
-    {
-        return $this->getDoctrine()
-            ->getRepository('AppBundle:Review');
     }
 
     private function getJsonBodyAsArray(Request $request)
@@ -92,7 +89,6 @@ class ReviewController extends Controller
         if (empty($content)) {
             return new JsonResponse(['code' => 400, 'message' => 'Review not found'], 400);
         }
-        $params = json_decode($content, true);
         return json_decode($content, true);
 
     }
@@ -105,6 +101,4 @@ class ReviewController extends Controller
             'rating' => $review->getRating()
         ];
     }
-
-
 }

@@ -4,6 +4,9 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    controller_factory:
+        class: AppBundle\Factory\Controller
+        arguments: [ "@doctrine.orm.entity_manager" ]
+    review_controller:
+        class: AppBundle\Controller\ReviewController
+        factory: "controller_factory:getReviewController"
