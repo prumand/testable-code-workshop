@@ -5,10 +5,13 @@ services:
     image: mysql:5
     environment:
       MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: testable_code_workshop
     networks:
       - back-tier
     ports: 
       - 3306:3306
+    volumes:
+      - ./db-dump:/docker-entrypoint-initdb.d/
   web:
     container_name: web
     build:
