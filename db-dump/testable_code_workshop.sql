@@ -20,12 +20,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Export von Tabelle product
+# Export von Tabelle review
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `review`;
 
-CREATE TABLE `product` (
+CREATE TABLE `review` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `rating` decimal(10,2) NOT NULL,
@@ -33,6 +33,9 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
+INSERT INTO `review` (`id`, `title`, `rating`)
+VALUES
+    (1, 'Unit test', 3.40);
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
