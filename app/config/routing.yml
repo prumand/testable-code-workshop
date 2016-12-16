@@ -1,3 +1,13 @@
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+# app/config/routing.yml
+reviews_get:
+    path:     /reviews/{id}
+    defaults: { _controller: review_controller:getAction }
+    methods: [GET]
+reviews_post:
+    path:     /reviews
+    defaults: { _controller: review_controller:postAction }
+    methods: [POST]
+reviews_put:
+    path:     /reviews/{id}
+    defaults: { _controller: review_controller:putAction }
+    methods: [PUT]

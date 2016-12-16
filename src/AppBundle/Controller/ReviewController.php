@@ -8,12 +8,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Doctrine\ORM\EntityManager;
+
 
 use AppBundle\Entity\Review;
 
-class ReviewController extends Controller
+class ReviewController
 {
 
+    protected $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     /**
      * @Route("/reviews/{id}")
      * @Method({"GET"})
@@ -41,7 +49,7 @@ class ReviewController extends Controller
 
         $review = new Review();
         $review->setTitle($reviewContent['title']);
-        $review->setTitle($reviewContent['rating']);
+        $review->setRating($reviewContent['rating'], 0);
 
         $this->persitReview($review);
 
@@ -75,14 +83,13 @@ class ReviewController extends Controller
 
     private function persitReview(Review $review)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($review);
-        $em->flush();
+        $this->entityManager->persist($review);
+        $this->entityManager->flush();
     }
 
     private function getReviewEntityManager()
     {
-        return $this->getDoctrine()
+        return $this->entityManager
             ->getRepository('AppBundle:Review');
     }
 
