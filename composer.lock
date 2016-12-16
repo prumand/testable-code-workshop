@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1ebd09163c7ec48518ae28ee46734b6c",
-    "content-hash": "cc91f9e637958e735e1eaf72f565a943",
+    "hash": "3ac3922c7c6c305921bbf1a3d32d615d",
+    "content-hash": "e6bd7808978b98786de0cd691a449f20",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1973,6 +1973,46 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "pact/pact",
+            "version": "0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mopoke/pact-php.git",
+                "reference": "66835372e6ab849f3cc7c7e906ea83c44f397b3e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mopoke/pact-php/zipball/66835372e6ab849f3cc7c7e906ea83c44f397b3e",
+                "reference": "66835372e6ab849f3cc7c7e906ea83c44f397b3e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "hafriedlander/phockito": "1.0.*",
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pact\\": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andy Kelk",
+                    "email": "andy@andykelk.net"
+                }
+            ],
+            "description": "Enables consumer driven contract testing, providing a mock service and DSL for the consumer project, and interaction playback and verification for the service provider project.",
+            "keywords": [
+                "pact"
+            ],
+            "time": "2015-09-21 19:12:12"
+        },
         {
             "name": "sensio/generator-bundle",
             "version": "v3.1.2",
