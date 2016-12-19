@@ -78,8 +78,7 @@ class ReviewController
         $review->setTitle($reviewContent['title']);
         $review->setRating($reviewContent['rating'], (new \DateTime())->format('s'));
 
-        $this->save($review);
-        $this->persitReview($review);
+        ($this->save)($review);
 
         return new JsonResponse($this->reviewToArray($review));
     }
@@ -90,7 +89,6 @@ class ReviewController
         if (empty($content)) {
             return new JsonResponse(['code' => 400, 'message' => 'Review not found'], 400);
         }
-        $params = json_decode($content, true);
         return json_decode($content, true);
 
     }

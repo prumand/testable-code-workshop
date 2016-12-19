@@ -5,20 +5,23 @@ namespace Tests\Unit\AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 use AppBundle\Controller\ReviewController;
+use Tests\Mock\ReviewMock;
+use AppBundle\Entity\Review;
 
 class ReviewControllerTest extends WebTestCase
 {
     private $container;
     private $review = ['id' => 1, 'title' => 'Unit Test', 'rating' => 3.4];
+    private $saveFunctionCalled;
+    private $findByIdElement;
+
 
     public function setUp()
     {
-        static::$kernel = static::createKernel();
-        static::$kernel->boot();
-        $this->container = static::$kernel->getContainer();
+        $this->saveFunctionCalled = 0;
+        $this->findByIdElement = null;
     }
 
     public function testGet()
@@ -26,6 +29,9 @@ class ReviewControllerTest extends WebTestCase
         // Arrange
         $request = new Request();
         $id = 1;
+
+        $this->findByIdElement = $this->getReviewMock($this->review);
+
         $jsonResponse = new JsonResponse($this->review);
         $reviewController = $this->getReviewController();
 
@@ -49,18 +55,42 @@ class ReviewControllerTest extends WebTestCase
           json_encode($this->review)
         );
         $reviewController = $this->getReviewController();
+        $this->findByIdElement = $this->getReviewMock($this->review);
 
-        // Act 
+        // Act
         $response = $reviewController->putAction($request, 1);
 
         // Assert
         $this->assertEquals($response, new JsonResponse($this->review));
+        $this->assertEquals(1, $this->saveFunctionCalled);
     }
 
     private function getReviewController()
     {
-        $reviewCtrl = $reviewController = new ReviewController();
-        $reviewCtrl->setContainer($this->container);
+        $reviewCtrl = $reviewController = new ReviewController(
+            $this->getSaveFunction(),
+            $this->getFindByIdFunction()
+        );
         return $reviewCtrl;
+    }
+
+    private function getReviewMock($params)
+    {
+        return (new ReviewMock)
+            ->getReviewMock($params);
+    }
+
+    private function getSaveFunction()
+    {
+        return function(Review $review) {
+            $this->saveFunctionCalled++;
+        };
+    }
+
+    private function getFindByIdFunction()
+    {
+        return function($id) {
+            return $this->findByIdElement;
+        };
     }
 }

@@ -7,6 +7,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install pdo_mysql zip
 
+# Enable and configure xdebug
+RUN pecl install xdebug
+RUN docker-php-ext-enable xdebug
+
 # add timezone settings
 RUN echo "[Date]" > /usr/local/etc/php/php.ini
 RUN echo "date.timezone = UTC" >> /usr/local/etc/php/php.ini
