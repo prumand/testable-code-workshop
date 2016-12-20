@@ -10,9 +10,13 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetRating($rating, $seconds, $expectedRating)
     {
+        // Arrange
         $review = new Review();
+
+        // Act
         $review->setRating($rating, $seconds);
 
+        // Assert
         $this->assertEquals(
             $review->getRating(),
             $expectedRating
