@@ -3,6 +3,7 @@ namespace AppBundle\Factory;
 
 use AppBundle\Controller\ReviewController;
 use AppBundle\Entity\Review;
+use AppBundle\Provider\DateTimeProvider;
 use Doctrine\ORM\EntityManagerInterface;
 
 class Controller {
@@ -18,7 +19,8 @@ class Controller {
     {
         return new ReviewController(
             $this->getSaveFunction(),
-            $this->getFindByIdFunction()
+            $this->getFindByIdFunction(),
+            $this->getDateTimeProvider()
         );
     }
 
@@ -37,5 +39,10 @@ class Controller {
                 ->getRepository('AppBundle:Review')
                 ->find($id);
         };
+    }
+
+    private function getDateTimeProvider()
+    {
+        return new DateTimeProvider();
     }
 }

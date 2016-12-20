@@ -11,20 +11,23 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
 use AppBundle\Entity\Review;
+use AppBundle\Interfaces\IDateTimeProvider;
 
 class ReviewController
 {
 
     private $save;
     private $findById;
+    private $dateTimeProvider;
 
-    public function __construct($save, $findById)
+    public function __construct($save, $findById, IDateTimeProvider $dateTimeProvider)
     {
         if (!is_callable($save) || !is_callable($findById)) {
             throw new \Exception(__CLASS__ . ' params are not callables');
         }
         $this->save = $save;
         $this->findById = $findById;
+        $this->dateTimeProvider = $dateTimeProvider;
     }
     /**
      * @Route("/reviews/{id}")
@@ -76,7 +79,7 @@ class ReviewController
         }
 
         $review->setTitle($reviewContent['title']);
-        $review->setRating($reviewContent['rating'], (new \DateTime())->format('s'));
+        $review->setRating($reviewContent['rating'], $this->dateTimeProvider->getSeconds());
 
         ($this->save)($review);
 

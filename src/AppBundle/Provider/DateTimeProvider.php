@@ -2,7 +2,7 @@
 
 namespace AppBundle\Provider;
 
-use AppBundle\Interfaces;
+use AppBundle\Interfaces\IDateTimeProvider;
 
 class DateTimeProvider implements IDateTimeProvider
 {
