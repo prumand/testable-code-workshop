@@ -52,7 +52,7 @@ class ReviewController
 
         $review = new Review();
         $review->setTitle($reviewContent['title']);
-        $review->setRating($reviewContent['rating'], 0);
+        $review->setRating($reviewContent['rating'], (new \DateTime())->format('s'));
 
         ($this->save)($review);
 
