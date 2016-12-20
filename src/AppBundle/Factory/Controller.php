@@ -3,16 +3,18 @@ namespace AppBundle\Factory;
 
 use AppBundle\Controller\ReviewController;
 use AppBundle\Entity\Review;
-use AppBundle\Provider\DateTimeProvider;
+use AppBundle\Interfaces\IDateTimeProvider;
 use Doctrine\ORM\EntityManagerInterface;
 
 class Controller {
 
     private $entityManager;
+    private $dateTimeProvider;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, IDateTimeProvider $dateTimeProvider)
     {
         $this->entityManager = $entityManager;
+        $this->dateTimeProvider = $dateTimeProvider;
     }
 
     public function getReviewController()
@@ -43,6 +45,6 @@ class Controller {
 
     private function getDateTimeProvider()
     {
-        return new DateTimeProvider();
+        return $this->dateTimeProvider;
     }
 }
