@@ -15,6 +15,8 @@ class ReviewControllerTest extends WebTestCase
 {
     private $container;
     private $review = ['id' => 1, 'title' => 'Unit Test', 'rating' => 3.4];
+    private $notFound = ['code' => 404, 'message' => 'Review not found'];
+    private $badRequest = ['code' => 400, 'message' => 'Bad request'];
     private $saveFunctionCalled;
     private $findByIdElement;
 
@@ -23,6 +25,18 @@ class ReviewControllerTest extends WebTestCase
     {
         $this->saveFunctionCalled = 0;
         $this->findByIdElement = null;
+    }
+
+    public function testConstructThrowsException()
+    {
+        // Arrange
+        $this->expectException(\Exception::class);
+
+        // Act
+        $reviewCtrl = new ReviewController(null, null, $this->getFakeDateTimeProvider());
+
+        // Assert
+
     }
 
     public function testGet()
@@ -34,6 +48,22 @@ class ReviewControllerTest extends WebTestCase
         $this->findByIdElement = $this->getReviewMock($this->review);
 
         $jsonResponse = new JsonResponse($this->review);
+        $reviewController = $this->getReviewController();
+
+        // Act
+        $response = $reviewController->getAction($id, $request);
+
+        // Assert
+        $this->assertEquals($jsonResponse, $response);
+    }
+
+    public function testGetNotFound()
+    {
+        // Arrange
+        $request = new Request();
+        $id = 9999999;
+        
+        $jsonResponse = new JsonResponse($this->notFound, 404);
         $reviewController = $this->getReviewController();
 
         // Act
@@ -64,6 +94,48 @@ class ReviewControllerTest extends WebTestCase
         // Assert
         $this->assertEquals($response, new JsonResponse($this->review));
         $this->assertEquals(1, $this->saveFunctionCalled);
+    }
+
+    public function testPutReviewNotFound()
+    {
+        // Arrange
+        $request = new Request(
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          json_encode($this->review)
+        );
+        $reviewController = $this->getReviewController();
+
+        // Act
+        $response = $reviewController->putAction($request, 1);
+
+        // Assert
+        $this->assertEquals($response, new JsonResponse($this->notFound, 404));
+    }
+
+    public function testPutBadRequest()
+    {
+        // Arrange
+        $request = new Request(
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          null
+        );
+        $reviewController = $this->getReviewController();
+
+        // Act
+        $response = $reviewController->putAction($request, 1);
+
+        // Assert
+        $this->assertEquals($response, new JsonResponse($this->badRequest, 400));
     }
 
     private function getReviewController()
