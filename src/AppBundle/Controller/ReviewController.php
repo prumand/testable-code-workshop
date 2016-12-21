@@ -90,7 +90,7 @@ class ReviewController
     {
         $content = $request->getContent();
         if (empty($content)) {
-            return new JsonResponse(['code' => 400, 'message' => 'Review not found'], 400);
+            return new JsonResponse(['code' => 400, 'message' => 'Bad request'], 400);
         }
         return json_decode($content, true);
 
