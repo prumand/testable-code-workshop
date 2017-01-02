@@ -27,6 +27,11 @@ class Review
     private $rating;
 
     /**
+     * ORM\Column(type="integer")
+     */
+    private $companyId;
+
+    /**
      * Get id
      *
      * @return integer
