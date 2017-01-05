@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Api;
 
+use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
+
 use AppBundle\Api\CompanyApi;
 use AppBundle\Entity\Review;
 
@@ -21,6 +24,19 @@ class CompanyApiTest extends \PHPUnit_Framework_TestCase {
 
     private function getCompanyApi()
     {
-        return new CompanyApi;
+        $mock = $this->getMock('\\GuzzleHttp\\ClientInterface');
+        $responseMock = $this->getMock('\\Psr\\Http\\Message\\ResponseInterface');
+        $responseMock->method('getBody')
+            ->willReturn($responseMock);
+        $responseMock
+            ->method('getContents')
+            ->willReturn(1);
+
+        $mock
+            ->method('get')
+            ->willReturn(
+                $responseMock
+            );
+        return new CompanyApi($mock);
     }
 }

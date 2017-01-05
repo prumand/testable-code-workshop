@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: testable_code_workshop
-    ports: 
+    ports:
       - 3306:3306
     volumes:
       - ./db-dump:/docker-entrypoint-initdb.d/
@@ -45,6 +45,26 @@ services:
       - DATABASE_URL=postgres://pactbroker:supersave@pactdb/pactbroker
       #- PACT_BROKER_USERNAME=admin
       #- PACT_BROKER_PASSWORD=admin
+    networks:
+      - back-tier
+  pactmock:
+    container_name: pactmock
+    image: madkom/pact-mock-service
+    volumes:
+      - ./log:/var/log/pacto
+      - ./contracts:/opt/contracts
+    entrypoint:
+      - pact-mock-service
+      - "--pact-specification-version"
+      - 3.0.0
+      - "-l"
+      - /var/log/pacto/pact-mock-service.log
+      - "-h"
+      - 0.0.0.0
+      - "-d"
+      - /opt/contracts
+      - "--port"
+      - "38657"
     networks:
       - back-tier
 networks:
