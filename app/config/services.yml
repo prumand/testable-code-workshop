@@ -13,6 +13,8 @@ services:
     review_controller:
         class: AppBundle\Controller\ReviewController
         factory: "controller_factory:getReviewController"
+    company_controller:
+        class: AppBundle\Controller\CompanyController
     date_time_provider:
         class: AppBundle\Provider\DateTimeProvider
     company_api:

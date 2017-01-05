@@ -11,3 +11,7 @@ reviews_put:
     path:     /reviews/{id}
     defaults: { _controller: review_controller:putAction }
     methods: [PUT]
+company_get:
+    path:     '/company'
+    defaults: { _controller: company_controller:getAction }
+    methods: [GET]
