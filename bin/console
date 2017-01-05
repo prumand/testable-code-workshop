@@ -19,6 +19,10 @@ $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
 $debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']) && $env !== 'prod';
 
+if(!defined('APP_ROOT_DIR')) {
+    define('APP_ROOT_DIR', realpath(__DIR__ . '/../'));
+}
+
 if ($debug) {
     Debug::enable();
 }
