@@ -6,12 +6,16 @@ parameters:
 services:
     controller_factory:
         class: AppBundle\Factory\Controller
-        arguments: [ 
+        arguments: [
             "@doctrine.orm.entity_manager",
-            "@date_time_provider" 
+            "@date_time_provider"
             ]
     review_controller:
         class: AppBundle\Controller\ReviewController
         factory: "controller_factory:getReviewController"
+    company_controller:
+        class: AppBundle\Controller\CompanyController
     date_time_provider:
         class: AppBundle\Provider\DateTimeProvider
+    company_api:
+      class: AppBundle\Api\CompanyApi

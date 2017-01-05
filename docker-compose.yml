@@ -6,23 +6,67 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: testable_code_workshop
-    networks:
-      - back-tier
-    ports: 
+    ports:
       - 3306:3306
     volumes:
       - ./db-dump:/docker-entrypoint-initdb.d/
+    networks:
+      - back-tier
   web:
     container_name: web
     build:
       context: .
-    networks:
-      - back-tier
     volumes:
       - .:/var/www/html
     ports:
       - 80:80
+    networks:
+      - back-tier
+  pactdb:
+    container_name: pactdb
+    image: postgres:9.4
+    networks:
+      - back-tier
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_USER=pactbroker
+      - POSTGRES_PASSWORD=supersave
+    networks:
+      - back-tier
+  pactweb:
+    container_name: pactweb
+    depends_on:
+      - pactdb
+    image: flowerpot/pact-broker-pg-docker
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgres://pactbroker:supersave@pactdb/pactbroker
+      #- PACT_BROKER_USERNAME=admin
+      #- PACT_BROKER_PASSWORD=admin
+    networks:
+      - back-tier
+  pactmock:
+    container_name: pactmock
+    image: madkom/pact-mock-service
+    volumes:
+      - ./log:/var/log/pacto
+      - ./contracts:/opt/contracts
+    entrypoint:
+      - pact-mock-service
+      - "--pact-specification-version"
+      - 3.0.0
+      - "-l"
+      - /var/log/pacto/pact-mock-service.log
+      - "-h"
+      - 0.0.0.0
+      - "-d"
+      - /opt/contracts
+      - "--port"
+      - "38657"
+    networks:
+      - back-tier
 networks:
   back-tier:
     driver: bridge
-    

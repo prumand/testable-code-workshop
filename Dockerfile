@@ -14,3 +14,8 @@ RUN docker-php-ext-enable xdebug
 # add timezone settings
 RUN echo "[Date]" > /usr/local/etc/php/php.ini
 RUN echo "date.timezone = UTC" >> /usr/local/etc/php/php.ini
+
+RUN mkdir /tmp/logs && mkdir /tmp/cache; \
+    chown www-data /tmp/logs; \
+    chown www-data /tmp/cache
+

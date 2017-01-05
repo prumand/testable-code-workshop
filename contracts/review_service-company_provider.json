@@ -1,0 +1,32 @@
+{
+  "consumer": {
+    "name": "Review Service"
+  },
+  "provider": {
+    "name": "Company Provider"
+  },
+  "interactions": [
+    {
+      "description": "a request for a company",
+      "provider_state": "A review with id 0 exists",
+      "request": {
+        "method": "get",
+        "path": "/company",
+        "query": "review_id=0",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": 1
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecificationVersion": "3.0.0"
+  }
+}
