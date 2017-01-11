@@ -11,7 +11,7 @@
       "provider_state": "A review with id 0 exists",
       "request": {
         "method": "get",
-        "path": "/company",
+        "path": "/web/company",
         "query": "review_id=0",
         "headers": {
           "Accept": "application/json"

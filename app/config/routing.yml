@@ -15,3 +15,10 @@ company_get:
     path:     '/company'
     defaults: { _controller: company_controller:getAction }
     methods: [GET]
+company_verify:
+    path:     '/provider-states'
+    defaults: { _controller: company_controller:getProviderStates }
+    methods: [GET]
+company_state_active:
+    path:     '/active'
+    defaults: { _controller: company_controller:activeAction }

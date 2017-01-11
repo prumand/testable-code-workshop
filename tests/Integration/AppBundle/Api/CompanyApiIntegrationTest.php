@@ -13,7 +13,7 @@ class CompanyApiIntegrationTest extends \PHPUnit_Framework_TestCase
     public function testGetCompanyId()
     {
         $client = new Client([
-            'base_uri' => 'http://pactmock:38657',
+            'base_uri' => 'http://pactmock:38657/web',
         ]);
 
         $companyProvider = Pact::mockService([
@@ -28,7 +28,7 @@ class CompanyApiIntegrationTest extends \PHPUnit_Framework_TestCase
             ->uponReceiving('a request for a company')
             ->withRequest([
                 'method' => 'get',
-                'path' => '/company',
+                'path' => '/web/company',
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
@@ -42,14 +42,11 @@ class CompanyApiIntegrationTest extends \PHPUnit_Framework_TestCase
                 ],
                 'body' => 1
             ]);
-
         $companyApi = new CompanyApi($client);
 
         $companyProvider->run(function() use ($companyApi) {
             $companyId = $companyApi->getCompanyId(new Review);
         });
-
-
 
         $this->assertTrue(true);
     }

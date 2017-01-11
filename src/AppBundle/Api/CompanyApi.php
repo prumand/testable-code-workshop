@@ -22,7 +22,7 @@ class CompanyApi implements ICompanyApi
 
         $response = $this->client->request(
             'GET',
-            '/company',
+            '/web/company',
             [
                 'query' => ['review_id' => (int) $reviewId],
                 'headers' => ['Accept' => 'application/json'],

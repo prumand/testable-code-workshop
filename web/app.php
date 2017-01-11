@@ -8,6 +8,9 @@ use Symfony\Component\Debug\Debug;
 // for more information
 //umask(0000);
 
+if(!defined('APP_ROOT_DIR')) {
+    define('APP_ROOT_DIR', realpath(__DIR__ . '/../'));
+}
 
 /** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require __DIR__.'/../app/autoload.php';

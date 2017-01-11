@@ -1,5 +1,10 @@
 version: '2'
 services:
+  files:
+    image: postgres:9.4
+    command: echo 'pseudo command for files-container'
+    volumes:
+      - /var/lib/postgresql/data/
   db:
     container_name: db
     image: mysql:5
@@ -7,7 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_DATABASE: testable_code_workshop
     ports:
-      - 3306:3306
+      - "${SERVICE_LISTEN}:3306:3306"
     volumes:
       - ./db-dump:/docker-entrypoint-initdb.d/
     networks:
@@ -19,7 +24,7 @@ services:
     volumes:
       - .:/var/www/html
     ports:
-      - 80:80
+      - "${SERVICE_LISTEN}:80:80"
     networks:
       - back-tier
   pactdb:
@@ -27,20 +32,20 @@ services:
     image: postgres:9.4
     networks:
       - back-tier
-    ports:
-      - "5432"
     environment:
       - POSTGRES_USER=pactbroker
       - POSTGRES_PASSWORD=supersave
+    volumes_from:
+      - files
     networks:
       - back-tier
-  pactweb:
-    container_name: pactweb
+  pactbroker:
+    container_name: pactbroker
     depends_on:
       - pactdb
     image: flowerpot/pact-broker-pg-docker
     ports:
-      - "5000:5000"
+      - "${SERVICE_LISTEN}:5000:5000"
     environment:
       - DATABASE_URL=postgres://pactbroker:supersave@pactdb/pactbroker
       #- PACT_BROKER_USERNAME=admin
@@ -65,6 +70,25 @@ services:
       - /opt/contracts
       - "--port"
       - "38657"
+    ports:
+      - "${SERVICE_LISTEN}:38657:38657"
+    networks:
+      - back-tier
+  pactverifier:
+    container_name: pactverifier
+    image: dius/pact-provider-verifier-docker
+    # command:
+    #   - sleep
+    #   - 365d
+    environment:
+      - pact_urls=http://pactbroker:5000/pacts/provider/Company%20Provider/consumer/Review%20Service/latest
+      #- pact_urls=/tmp/pacts/foo-consumer.json # If you have local Pacts
+      - provider_base_url=http://web
+      - provider_states_url=http://web/web/provider-states
+      - provider_states_active_url=http://web/web/active
+    depends_on:
+      - pactbroker
+      - web
     networks:
       - back-tier
 networks:
